@@ -90,20 +90,24 @@ export function httpMethod(method: string, path: string, ...middleware: interfac
     };
 }
 
-export const request = paramDecoratorFactory(PARAMETER_TYPE.REQUEST);
-export const response = paramDecoratorFactory(PARAMETER_TYPE.RESPONSE);
+export const request = decoratorFactory(PARAMETER_TYPE.REQUEST);
+export const response = decoratorFactory(PARAMETER_TYPE.RESPONSE);
 export const requestParam = paramDecoratorFactory(PARAMETER_TYPE.PARAMS);
 export const queryParam = paramDecoratorFactory(PARAMETER_TYPE.QUERY);
-export const requestBody = paramDecoratorFactory(PARAMETER_TYPE.BODY);
-export const requestHeaders = paramDecoratorFactory(PARAMETER_TYPE.HEADERS);
-export const cookies = paramDecoratorFactory(PARAMETER_TYPE.COOKIES);
-export const next = paramDecoratorFactory(PARAMETER_TYPE.NEXT);
+export const requestBody = decoratorFactory(PARAMETER_TYPE.BODY);
+export const requestHeaders = decoratorFactory(PARAMETER_TYPE.HEADERS);
+export const cookies = decoratorFactory(PARAMETER_TYPE.COOKIES);
+export const next = decoratorFactory(PARAMETER_TYPE.NEXT);
 
-function paramDecoratorFactory(parameterType: PARAMETER_TYPE): (name?: string) => ParameterDecorator {
+function decoratorFactory(parameterType: PARAMETER_TYPE): () => ParameterDecorator {
     return function (name?: string): ParameterDecorator {
         name = name || "default";
         return params(parameterType, name);
     };
+}
+
+function paramDecoratorFactory(parameterType: PARAMETER_TYPE): (name: string) => ParameterDecorator {
+    return decoratorFactory(parameterType);
 }
 
 export function params(type: PARAMETER_TYPE, parameterName: string) {
